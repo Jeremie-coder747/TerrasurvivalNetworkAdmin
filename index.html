@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TSN – Terra Survival Network</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-deep:    #0a0f1e;
+      --bg-card:    #0f1a2e;
+      --bg-card2:   #111f35;
+      --border:     rgba(255,255,255,0.08);
+      --border-glow:rgba(32,178,170,0.35);
+      --teal:       #20b2aa;
+      --teal-light: #2dd4bf;
+      --teal-glow:  rgba(32,178,170,0.25);
+      --green:      #22c55e;
+      --blue:       #3b82f6;
+      --discord:    #5865F2;
+      --text:       #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim:   #64748b;
+      --accent:     #f59e0b;
+      --red:        #ef4444;
+      --white:      #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(32,178,170,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 10% 80%, rgba(59,130,246,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 90% 60%, rgba(32,178,170,0.06) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      background: rgba(10,15,30,0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+
+    .nav-logo img {
+      width: 38px; height: 38px;
+      border-radius: 0;
+      object-fit: contain;
+      border: none;
+      image-rendering: pixelated;
+    }
+
+    .nav-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1rem; color: var(--white);
+    }
+
+    .nav-logo-text span { color: var(--teal-light); }
+
+    .nav-links { display: flex; gap: 0.2rem; list-style: none; align-items: center; }
+
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none;
+      font-weight: 600; font-size: 0.9rem;
+      padding: 0.4rem 0.85rem; border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+
+    .btn-discord-nav {
+      background: var(--discord) !important; color: white !important;
+      border-radius: 8px !important; font-weight: 700 !important;
+    }
+
+    .btn-discord-nav:hover { background: #4752c4 !important; box-shadow: 0 4px 14px rgba(88,101,242,0.45) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 6rem 2rem 5rem;
+      position: relative; text-align: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 28% 72%, rgba(255,255,255,0.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 48% 12%, rgba(255,255,255,0.45) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 82%, rgba(255,255,255,0.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 82% 30%, rgba(255,255,255,0.5)  0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 65%, rgba(255,255,255,0.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 38% 48%, rgba(32,178,170,0.7) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 72% 22%, rgba(32,178,170,0.5) 0%, transparent 100%);
+    }
+
+    .hero-logo { position: relative; z-index: 1; margin-bottom: 1.5rem; animation: fadeUp 0.8s ease both; }
+
+    .hero-logo img {
+      width: 130px; height: 130px;
+      object-fit: contain; image-rendering: pixelated;
+      border-radius: 0;
+      border: none;
+      filter: drop-shadow(0 0 20px rgba(32,178,170,0.5)) drop-shadow(0 0 40px rgba(32,178,170,0.25));
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%,100% { filter: drop-shadow(0 0 20px rgba(32,178,170,0.5)) drop-shadow(0 0 40px rgba(32,178,170,0.25)); }
+      50%      { filter: drop-shadow(0 0 30px rgba(32,178,170,0.8)) drop-shadow(0 0 60px rgba(32,178,170,0.4)); }
+    }
+
+    .hero-title {
+      position: relative; z-index: 1;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      color: var(--teal-light);
+      line-height: 1.1; margin-bottom: 0.4rem;
+      animation: fadeUp 0.8s 0.1s ease both;
+      text-shadow: 0 0 40px rgba(32,178,170,0.4);
+    }
+
+    .hero-subtitle {
+      position: relative; z-index: 1;
+      font-size: 1.1rem; color: var(--teal); font-weight: 600;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-tagline {
+      position: relative; z-index: 1;
+      color: var(--text-muted); font-size: 1rem;
+      margin-bottom: 1.75rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    /* Status badge */
+    .hero-status {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.5rem 1.25rem;
+      margin-bottom: 1.75rem;
+      font-size: 0.88rem; font-weight: 700;
+      animation: fadeUp 0.8s 0.35s ease both;
+    }
+
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot.online   { background: var(--green); animation: blink 1.8s infinite; }
+    .status-dot.offline  { background: var(--red); }
+    .status-dot.checking { background: var(--text-dim); }
+
+    @keyframes blink {
+      0%,100% { box-shadow: 0 0 6px var(--green); }
+      50%      { box-shadow: 0 0 14px var(--green), 0 0 24px rgba(34,197,94,0.4); }
+    }
+
+    /* Hero IP card */
+    .hero-ip {
+      position: relative; z-index: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      display: flex; gap: 2.5rem;
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+
+    .ip-block { text-align: left; }
+
+    .ip-block-label {
+      font-size: 0.72rem; font-weight: 800;
+      color: var(--teal); text-transform: uppercase;
+      letter-spacing: 0.12em; margin-bottom: 0.5rem;
+    }
+
+    .ip-value {
+      font-family: 'Courier New', monospace;
+      font-size: 0.92rem; color: var(--text);
+      background: rgba(255,255,255,0.05);
+      padding: 0.3rem 0.75rem; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+      user-select: all; display: block; margin-bottom: 0.3rem;
+    }
+
+    .ip-value:hover { background: rgba(32,178,170,0.15); color: var(--teal-light); }
+    .ip-value.copied { background: rgba(34,197,94,0.15); color: var(--green); }
+
+    .hero-btns {
+      position: relative; z-index: 1;
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.8s 0.55s ease both;
+    }
+
+    .btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.75rem 1.75rem; border-radius: 10px;
+      transition: all 0.22s; cursor: pointer; border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal), #17a8a0);
+      color: var(--bg-deep);
+      box-shadow: 0 4px 16px rgba(32,178,170,0.35);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(32,178,170,0.5); }
+
+    .btn-discord {
+      background: var(--discord); color: white;
+      box-shadow: 0 4px 16px rgba(88,101,242,0.35);
+    }
+
+    .btn-discord:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(88,101,242,0.5); background: #4752c4; }
+
+    .btn-outline {
+      background: transparent; color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal-light); background: rgba(32,178,170,0.06); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTIONS ── */
+    .section { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; position: relative; z-index: 1; }
+
+    .section-label {
+      font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 0.4rem;
+    }
+
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: clamp(1.7rem, 4vw, 2.5rem);
+      color: var(--white); margin-bottom: 0.75rem;
+    }
+
+    .divider {
+      width: 48px; height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+      border-radius: 2px; margin-bottom: 2.5rem;
+    }
+
+    .sep { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 2rem; }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; align-items: start; }
+
+    .about-text p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem; font-size: 1.02rem; }
+
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    .feature-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.88rem; font-weight: 700; color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .feature-item:hover { border-color: var(--border-glow); color: var(--text); background: var(--bg-card2); }
+
+    /* ── IP SECTION ── */
+    .ip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    .ip-card { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 14px; padding: 1.5rem; }
+
+    .ip-card-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 1rem; }
+
+    .ip-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+
+    .ip-row-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+
+    .ip-copy {
+      font-family: 'Courier New', monospace; font-size: 0.82rem;
+      background: rgba(255,255,255,0.06); padding: 0.25rem 0.65rem;
+      border-radius: 5px; cursor: pointer; color: var(--text);
+      transition: all 0.2s; user-select: all;
+    }
+
+    .ip-copy:hover { background: rgba(32,178,170,0.18); color: var(--teal-light); }
+    .ip-copy.copied { background: rgba(34,197,94,0.18); color: var(--green); }
+
+    /* ── RULES ── */
+    .rules-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.75rem; }
+
+    .tab-btn {
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-muted); padding: 0.55rem 1.3rem;
+      border-radius: 8px; cursor: pointer; transition: all 0.2s;
+    }
+
+    .tab-btn.active { background: rgba(32,178,170,0.15); border-color: var(--teal); color: var(--teal-light); }
+    .tab-btn:hover:not(.active) { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+    .rules-panel { display: none; }
+    .rules-panel.active { display: block; }
+
+    .rule-item {
+      display: flex; gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeSlide 0.3s ease both;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .rule-num { font-family: 'Space Grotesk', sans-serif; font-size: 0.68rem; font-weight: 700; color: var(--teal); width: 22px; flex-shrink: 0; padding-top: 3px; }
+
+    .rule-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--teal-light); margin-bottom: 0.25rem; }
+
+    .rule-desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; }
+
+    /* ── AWARDS ── */
+    .awards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.25rem; }
+
+    .award-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.4rem;
+      transition: all 0.25s; position: relative; overflow: hidden;
+    }
+
+    .award-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+    }
+
+    .award-card:hover::after { transform: scaleX(1); }
+    .award-card:hover { border-color: var(--border-glow); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+
+    .award-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+
+    .award-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--teal-light); margin-bottom: 0.75rem; }
+
+    .podium { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .podium li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+
+    .place { font-size: 0.75rem; width: 22px; flex-shrink: 0; }
+
+    /* ── STAFF ── */
+    .staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.25rem; }
+
+    .staff-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.5rem 1rem;
+      text-align: center; transition: all 0.25s;
+    }
+
+    .staff-card:hover { border-color: var(--border-glow); transform: translateY(-3px); }
+
+    .staff-avatar {
+      width: 60px; height: 60px; border-radius: 10px;
+      background: var(--bg-card2); display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin: 0 auto 0.75rem;
+      border: 1px solid var(--border-glow);
+    }
+
+    .staff-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--white); margin-bottom: 0.2rem; }
+    .staff-role { font-size: 0.8rem; color: var(--teal); font-weight: 600; }
+
+    /* ── DISCORD CTA ── */
+    .discord-cta {
+      background: linear-gradient(135deg, rgba(88,101,242,0.12) 0%, rgba(10,15,30,0) 60%);
+      border: 1px solid rgba(88,101,242,0.2);
+      border-radius: 18px; padding: 3.5rem 2rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+
+    .discord-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(88,101,242,0.07), transparent);
+      pointer-events: none;
+    }
+
+    .discord-cta h2 { position: relative; z-index: 1; margin-bottom: 0.6rem; }
+    .discord-cta p { position: relative; z-index: 1; color: var(--text-muted); margin-bottom: 1.75rem; font-size: 1rem; }
+    .discord-cta .btn { position: relative; z-index: 1; font-size: 1rem; padding: 0.85rem 2.25rem; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 1.75rem 2rem; position: relative; z-index: 1; }
+
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    .footer-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--text-muted); }
+    .footer-copy { font-size: 0.78rem; color: var(--text-dim); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(32,178,170,0.95); color: var(--bg-deep);
+      font-weight: 800; font-size: 0.85rem;
+      padding: 0.65rem 1.5rem; border-radius: 8px;
+      z-index: 9999; transition: transform 0.3s ease; pointer-events: none;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .ip-grid    { grid-template-columns: 1fr; }
+      .features   { grid-template-columns: 1fr; }
+      .hero-ip    { flex-direction: column; gap: 1.25rem; padding: 1.25rem; }
+      nav .nav-links li:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="logo.png" alt="TSN"/>
+    <span class="nav-logo-text">TSN – <span>Terra Survival</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#connect">Connect</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#awards">Awards</a></li>
+    <li><a href="#staff">Staff</a></li>
+    <li><a href="https://discord.gg/d9JPJBEPRk" target="_blank" class="btn-discord-nav">Discord</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo">
+    <img src="logo.png" alt="TSN Logo"/>
+  </div>
+
+  <h1 class="hero-title">Terra Survival Network</h1>
+  <p class="hero-subtitle">(TSN) Terra Survival Network</p>
+  <p class="hero-tagline">A modern Minecraft Survival SMP — Java &amp; Bedrock Edition</p>
+
+  <div class="hero-status" id="heroStatus">
+    <span class="status-dot checking" id="statusDot"></span>
+    <span id="statusText" style="color:var(--text-muted)">Checking server...</span>
+    <span id="statusPlayers" style="color:var(--text-dim); margin-left:0.2rem;"></span>
+    <button onclick="manualRefresh()" id="refreshBtn" title="Refresh status" style="background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:0.95rem;margin-left:0.4rem;padding:0;line-height:1;transition:all 0.2s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--text-dim)'">↻</button>
+  </div>
+
+  <div class="hero-ip">
+    <div class="ip-block">
+      <div class="ip-block-label">☕ Java Edition</div>
+      <span class="ip-value" onclick="copyText(this,'tsnsurvival.aternos.me:37467')">tsnsurvival.aternos.me:37467</span>
+    </div>
+    <div class="ip-block">
+      <div class="ip-block-label">📱 Bedrock Edition</div>
+      <span class="ip-value" onclick="copyText(this,'mc.aquacobalt.com')">IP: mc.aquacobalt.com</span>
+      <span class="ip-value" onclick="copyText(this,'37467')">Port: 37467</span>
+    </div>
+  </div>
+
+  <div class="hero-btns">
+    <a href="#connect" class="btn btn-primary">🎮 How to Connect</a>
+    <a href="https://discord.gg/d9JPJBEPRk" target="_blank" class="btn btn-discord">Join Discord</a>
+    <a href="#about" class="btn btn-outline">Learn More</a>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="reveal">
+    <p class="section-label">Our Home</p>
+    <h2>About the Server</h2>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Terra Survival Network is a friendly, community-based Minecraft SMP focused on fair survival gameplay, creativity, and long-term worlds.</p>
+        <p><strong style="color:var(--white)">This server is not dead!</strong> We're actively maintained and updated with a growing community of dedicated players.</p>
+        <p>We support both Java and Bedrock editions so everyone can join. Come hang out, build something amazing, and make new friends.</p>
+      </div>
+      <div class="features">
+        <div class="feature-item">🌍 Survival SMP</div>
+        <div class="feature-item">☕ Java Edition</div>
+        <div class="feature-item">📱 Bedrock Edition</div>
+        <div class="feature-item">🤝 Friendly Community</div>
+        <div class="feature-item">🔨 Fair Gameplay</div>
+        <div class="feature-item">🏆 Player Awards</div>
+        <div class="feature-item">🛡️ Active Staff</div>
+        <div class="feature-item">🎉 Events & Giveaways</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- CONNECT -->
+<section class="section" id="connect">
+  <div class="reveal">
+    <p class="section-label">Join the Server</p>
+    <h2>Connection Info</h2>
+    <div class="divider"></div>
+    <div class="ip-grid">
+      <div class="ip-card">
+        <div class="ip-card-title">☕ Java Edition</div>
+        <div class="ip-row"><span class="ip-row-label">Server IP</span><span class="ip-copy" onclick="copyText(this,'tsnsurvival.aternos.me')">tsnsurvival.aternos.me</span></div>
+        <div class="ip-row"><span class="ip-row-label">Port</span><span class="ip-copy" onclick="copyText(this,'37467')">37467</span></div>
+        <div class="ip-row"><span class="ip-row-label">Full Address</span><span class="ip-copy" onclick="copyText(this,'tsnsurvival.aternos.me:37467')">tsnsurvival.aternos.me:37467</span></div>
+      </div>
+      <div class="ip-card">
+        <div class="ip-card-title">📱 Bedrock Edition</div>
+        <div class="ip-row"><span class="ip-row-label">Server IP</span><span class="ip-copy" onclick="copyText(this,'mc.aquacobalt.com')">mc.aquacobalt.com</span></div>
+        <div class="ip-row"><span class="ip-row-label">Alt IP</span><span class="ip-copy" onclick="copyText(this,'tsnsurvival.aternos.me')">tsnsurvival.aternos.me</span></div>
+        <div class="ip-row"><span class="ip-row-label">Port</span><span class="ip-copy" onclick="copyText(this,'37467')">37467</span></div>
+      </div>
+    </div>
+    <p style="color:var(--text-dim); font-size:0.83rem; margin-top:1rem; text-align:center;">Click any value to copy · Server runs on Aternos (may need to be started in Discord)</p>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- RULES -->
+<section class="section" id="rules">
+  <div class="reveal">
+    <p class="section-label">Play Nice</p>
+    <h2>Server Rules</h2>
+    <div class="divider"></div>
+    <div class="rules-tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'mc')">🏔 Minecraft</button>
+      <button class="tab-btn" onclick="switchTab(this,'dc')">💬 Discord</button>
+    </div>
+    <div id="tab-mc" class="rules-panel active">
+      <div class="rule-item"><span class="rule-num">01</span><div><div class="rule-name">No Griefing</div><div class="rule-desc">No destroying others' builds, letting creepers blow things up, using TNT, or causing lag with redstone machines.</div></div></div>
+      <div class="rule-item"><span class="rule-num">02</span><div><div class="rule-name">No Stealing</div><div class="rule-desc">Don't take from others' chests or claim their homes and structures.</div></div></div>
+      <div class="rule-item"><span class="rule-num">03</span><div><div class="rule-name">No Killing Others' Pets</div><div class="rule-desc">Instant ban. Period.</div></div></div>
+      <div class="rule-item"><span class="rule-num">04</span><div><div class="rule-name">No Spamming or Advertising</div><div class="rule-desc">No Discord invites, websites, or malicious links in chat. Contact staff for partnership.</div></div></div>
+      <div class="rule-item"><span class="rule-num">05</span><div><div class="rule-name">No Unfinished Builds</div><div class="rule-desc">Keep the world clean. Finish what you start or remove it.</div></div></div>
+      <div class="rule-item"><span class="rule-num">06</span><div><div class="rule-name">No NSFW Builds or Signs</div><div class="rule-desc">Keep it appropriate. No vulgar signs or inappropriate structures.</div></div></div>
+      <div class="rule-item"><span class="rule-num">07</span><div><div class="rule-name">Respect Others' Space</div><div class="rule-desc">No entering homes without permission. No spawn killing unless both players agree to PvP.</div></div></div>
+      <div class="rule-item"><span class="rule-num">08</span><div><div class="rule-name">No Hacking or Exploiting</div><div class="rule-desc">No flying hacks, X-ray, Baritone bots, or any other cheats. Play fair.</div></div></div>
+      <div class="rule-item"><span class="rule-num">09</span><div><div class="rule-name">No Harassment or Slurs</div><div class="rule-desc">Mild swearing is fine. Zero tolerance for slurs, discrimination, or targeted harassment.</div></div></div>
+      <div class="rule-item"><span class="rule-num">10</span><div><div class="rule-name">No Loophole Abuse</div><div class="rule-desc">If something's clearly wrong, don't do it — even if not listed. Use common sense.</div></div></div>
+    </div>
+    <div id="tab-dc" class="rules-panel">
+      <div class="rule-item"><span class="rule-num">01</span><div><div class="rule-name">Follow Discord's TOS</div><div class="rule-desc">All Discord Terms of Service apply, plus our additional rules.</div></div></div>
+      <div class="rule-item"><span class="rule-num">02</span><div><div class="rule-name">No Spamming</div><div class="rule-desc">Don't spam messages. You'll get muted.</div></div></div>
+      <div class="rule-item"><span class="rule-num">03</span><div><div class="rule-name">No Harassment</div><div class="rule-desc">No slurs, discrimination, or targeted harassment of any kind.</div></div></div>
+      <div class="rule-item"><span class="rule-num">04</span><div><div class="rule-name">No NSFW Content</div><div class="rule-desc">No porn, gore, or inappropriate content. Server must be suitable for users 13+.</div></div></div>
+      <div class="rule-item"><span class="rule-num">05</span><div><div class="rule-name">No Personal Information</div><div class="rule-desc">Don't share or ask for names, phone numbers, or financial details.</div></div></div>
+      <div class="rule-item"><span class="rule-num">06</span><div><div class="rule-name">No Advertising</div><div class="rule-desc">No posting Discord invites or external links without staff approval.</div></div></div>
+      <div class="rule-item"><span class="rule-num">07</span><div><div class="rule-name">No Recording Voice Channels</div><div class="rule-desc">Do not record voice channels without consent of everyone present.</div></div></div>
+      <div class="rule-item"><span class="rule-num">08</span><div><div class="rule-name">No Loophole Abuse</div><div class="rule-desc">If it's not right, don't do it. USE YOUR COMMON SENSE.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- AWARDS -->
+<section class="section" id="awards">
+  <div class="reveal">
+    <p class="section-label">Hall of Fame</p>
+    <h2>Season Awards</h2>
+    <div class="divider"></div>
+    <div class="awards-grid">
+      <div class="award-card"><div class="award-icon">⏱️</div><div class="award-title">Most Playtime</div><ul class="podium"><li><span class="place">🥇</span> Shorkster — 253h</li><li><span class="place">🥈</span> CautiousBlue — 137h</li><li><span class="place">🥉</span> Seiga — 128h</li></ul></div>
+      <div class="award-card"><div class="award-icon">⚔️</div><div class="award-title">Most Kills</div><ul class="podium"><li><span class="place">🥇</span> bluepandaiscool — 96</li><li><span class="place">🥈</span> reeeeekid_1 — 44</li><li><span class="place">🥉</span> CautiousBlue — 33</li></ul></div>
+      <div class="award-card"><div class="award-icon">💀</div><div class="award-title">Most Deaths</div><ul class="podium"><li><span class="place">🥇</span> CautiousBlue — 544</li><li><span class="place">🥈</span> reeeeekid_1 — 500</li><li><span class="place">🥉</span> Shorkster — 208</li></ul></div>
+      <div class="award-card"><div class="award-icon">🎨</div><div class="award-title">Best Skin</div><ul class="podium"><li><span class="place">🥇</span> CautiousBlue</li></ul></div>
+      <div class="award-card"><div class="award-icon">🏠</div><div class="award-title">Best House</div><ul class="podium"><li><span class="place">🥇</span> bluepandaiscool</li></ul></div>
+      <div class="award-card"><div class="award-icon">🌟</div><div class="award-title">Most Dedicated</div><ul class="podium"><li><span class="place">🏆</span> 3-Way Tie!</li><li><span class="place" style="opacity:0">–</span> CautiousBlue</li><li><span class="place" style="opacity:0">–</span> Shorkster</li><li><span class="place" style="opacity:0">–</span> TinyPixels</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- STAFF -->
+<section class="section" id="staff">
+  <div class="reveal">
+    <p class="section-label">The Team</p>
+    <h2>Staff Members</h2>
+    <div class="divider"></div>
+    <div class="staff-grid">
+      <div class="staff-card"><div class="staff-avatar">👑</div><div class="staff-name">bluepandaiscool</div><div class="staff-role">Owner</div></div>
+      <div class="staff-card"><div class="staff-avatar">🎮</div><div class="staff-name">CautiousBlue</div><div class="staff-role">Owner / Admin</div></div>
+      <div class="staff-card"><div class="staff-avatar">🛡️</div><div class="staff-name">bobegnopS</div><div class="staff-role">Head Moderator</div></div>
+      <div class="staff-card"><div class="staff-avatar">🛡️</div><div class="staff-name">Shorkster / notfuz</div><div class="staff-role">Moderator</div></div>
+      <div class="staff-card"><div class="staff-avatar">⚙️</div><div class="staff-name">Cyberbros2013</div><div class="staff-role">Developer</div></div>
+      <div class="staff-card"><div class="staff-avatar">⚙️</div><div class="staff-name">Very_Doggie</div><div class="staff-role">Developer</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- DISCORD CTA -->
+<section class="section">
+  <div class="reveal discord-cta">
+    <h2>Join Our Community</h2>
+    <p>Connect with the TSN community on Discord — get server updates, participate in votes, and hang out with fellow players.</p>
+    <a href="https://discord.gg/d9JPJBEPRk" target="_blank" class="btn btn-discord">Join the Discord →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">⚡ TSN – Terra Survival Network</span>
+    <span class="footer-copy">© 2025 TSN. Not affiliated with Mojang or Microsoft.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Copied to clipboard!</div>
+
+<script>
+  function copyText(el, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = el.textContent;
+      el.classList.add('copied');
+      el.textContent = '✓ Copied!';
+      setTimeout(() => { el.classList.remove('copied'); el.textContent = orig; }, 1500);
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    });
+  }
+
+  function switchTab(btn, tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.rules-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  async function checkStatus() {
+    const dot  = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    const pls  = document.getElementById('statusPlayers');
+    try {
+      const res  = await fetch('https://api.minetools.eu/ping/tsnsurvival.aternos.me/37467');
+      const data = await res.json();
+      if (data.players !== undefined) {
+        dot.className = 'status-dot online';
+        text.textContent = 'Server Online';
+        text.style.color = 'var(--green)';
+        pls.textContent  = `· ${data.players.online}/${data.players.max} players`;
+      } else { throw new Error(); }
+    } catch {
+      dot.className = 'status-dot offline';
+      text.textContent = 'Server Offline';
+      text.style.color = 'var(--red)';
+      pls.textContent  = '· 0/20 players';
+    }
+  }
+
+  checkStatus();
+  setInterval(checkStatus, 60000);
+</script>
+</body>
+</html>
