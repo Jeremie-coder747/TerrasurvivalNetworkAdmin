@@ -415,6 +415,91 @@
     .discord-cta p { position: relative; z-index: 1; color: var(--text-muted); margin-bottom: 1.75rem; font-size: 1rem; }
     .discord-cta .btn { position: relative; z-index: 1; font-size: 1rem; padding: 0.85rem 2.25rem; }
 
+    /* ── GALLERY ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .gallery-item:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    .gallery-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.5rem;
+      color: var(--text-dim);
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    .gallery-placeholder span { font-size: 1.75rem; }
+
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end;
+      padding: 0.75rem;
+    }
+
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .lightbox {
+      position: fixed; inset: 0; z-index: 9998;
+      background: rgba(0,0,0,0.92);
+      display: none; align-items: center; justify-content: center;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw; max-height: 85vh;
+      border-radius: 10px;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    }
+
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: rgba(255,255,255,0.1); border: none;
+      color: white; font-size: 1.5rem;
+      width: 40px; height: 40px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); padding: 1.75rem 2rem; position: relative; z-index: 1; }
 
@@ -463,10 +548,11 @@
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#connect">Connect</a></li>
+    <li><a href="#gallery">Gallery</a></li>
     <li><a href="#rules">Rules</a></li>
     <li><a href="#awards">Awards</a></li>
     <li><a href="#staff">Staff</a></li>
-    <li><a href="https://discord.gg/d9JPJBEPRk" target="_blank" class="btn-discord-nav">Discord</a></li>
+    <li><a href="https://discord.gg/rmNnhA5AyT" target="_blank" class="btn-discord-nav">Discord</a></li>
   </ul>
 </nav>
 
@@ -501,7 +587,7 @@
 
   <div class="hero-btns">
     <a href="#connect" class="btn btn-primary">🎮 How to Connect</a>
-    <a href="https://discord.gg/d9JPJBEPRk" target="_blank" class="btn btn-discord">Join Discord</a>
+    <a href="https://discord.gg/rmNnhA5AyT" target="_blank" class="btn btn-discord">Join Discord</a>
     <a href="#about" class="btn btn-outline">Learn More</a>
   </div>
 </div>
@@ -559,6 +645,49 @@
     <p style="color:var(--text-dim); font-size:0.83rem; margin-top:1rem; text-align:center;">Click any value to copy · Server runs on Aternos (may need to be started in Discord)</p>
   </div>
 </section>
+
+<div class="sep"></div>
+
+<!-- GALLERY -->
+<section class="section" id="gallery">
+  <div class="reveal">
+    <p class="section-label">Screenshots</p>
+    <h2>Server Gallery</h2>
+    <div class="divider"></div>
+    <div class="gallery-grid">
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <div class="gallery-placeholder"><span>🖼️</span>Add Image</div>
+        <div class="gallery-overlay"></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <div class="gallery-placeholder"><span>🖼️</span>Add Image</div>
+        <div class="gallery-overlay"></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <div class="gallery-placeholder"><span>🖼️</span>Add Image</div>
+        <div class="gallery-overlay"></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <div class="gallery-placeholder"><span>🖼️</span>Add Image</div>
+        <div class="gallery-overlay"></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <div class="gallery-placeholder"><span>🖼️</span>Add Image</div>
+        <div class="gallery-overlay"></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <div class="gallery-placeholder"><span>🖼️</span>Add Image</div>
+        <div class="gallery-overlay"></div>
+      </div>
+    </p>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="Gallery Image"/>
+</div>
 
 <div class="sep"></div>
 
@@ -642,7 +771,7 @@
   <div class="reveal discord-cta">
     <h2>Join Our Community</h2>
     <p>Connect with the TSN community on Discord — get server updates, participate in votes, and hang out with fellow players.</p>
-    <a href="https://discord.gg/d9JPJBEPRk" target="_blank" class="btn btn-discord">Join the Discord →</a>
+    <a href="https://discord.gg/rmNnhA5AyT" target="_blank" class="btn btn-discord">Join the Discord →</a>
   </div>
 </section>
 
@@ -703,8 +832,21 @@
     }
   }
 
+  function openLightbox(el) {
+    const img = el.querySelector('img');
+    if (!img) return;
+    document.getElementById('lightboxImg').src = img.src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
   checkStatus();
-  setInterval(checkStatus, 60000);
+  setInterval(checkStatus, 30000);
 </script>
 </body>
 </html>
